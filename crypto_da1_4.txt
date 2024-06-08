@@ -1,0 +1,101 @@
+/*
+findBestDecryption Method:
+The findBestDecryption method attempts to find the best decryption for a given encrypted string.
+It tries all possible keys (0 to 255) and decrypts the string using each key.
+For each decryption attempt, it calculates a score using the scoreDecryption method and keeps track of the decryption with the highest score.
+Finally, it returns the best decryption found.
+scoreDecryption Method:
+The scoreDecryption method calculates a score for a given decryption attempt.
+It uses a simple scoring mechanism based on the frequency of English letters and common English words in the decrypted text.
+The score is calculated based on the number of letters and spaces in the decrypted text.
+Higher scores indicate a higher likelihood that the decrypted text is meaningful English.
+*/
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+public class Crpyto_problem_DetectSingleCharacterXOR {
+    public static void myDetails(){
+        System.out.println("*************************************************************************");
+        System.out.println("         NAME    : MONISHA S");
+        System.out.println("         REG.NO  : 21BCT0414");
+        System.out.println("         AIM     : Implementation of the Detect single-character XOR");
+        System.out.println("         DATE    : 02/08/2024");
+        System.out.println("*************************************************************************\n");
+    } 
+    public static void main(String[] args) {
+        myDetails();
+        try {
+            // Read the file containing the encrypted strings
+            BufferedReader reader = new BufferedReader(new FileReader("encrypted_strings.txt"));
+            String line;
+            String bestDecryption = "";
+            double bestScore = Double.NEGATIVE_INFINITY;
+
+            // Iterate through each line in the file
+            while ((line = reader.readLine()) != null) {
+                // Decrypt the current line with all possible keys and find the best decryption
+                String decryption = findBestDecryption(line);
+                double score = scoreDecryption(decryption);
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestDecryption = decryption;
+                }
+            }
+
+            // Print the best decryption
+            System.out.println("Decrypted Message: " + bestDecryption);
+            reader.close();
+        } catch (IOException e) {
+            System.err.println("Error reading the file: " + e.getMessage());
+        }
+    }
+
+    // Decrypts the input string with all possible single-byte keys and returns the best decryption
+    private static String findBestDecryption(String line) {
+        String bestDecryption = "";
+        double bestScore = Double.NEGATIVE_INFINITY;
+
+        // Try all possible keys
+        for (int key = 0; key < 256; key++) {
+            StringBuilder decrypted = new StringBuilder();
+
+            // Decrypt with current key
+            for (char c : line.toCharArray()) {
+                // XOR each character with the key
+                char decryptedChar = (char) (c ^ key);
+                decrypted.append(decryptedChar);
+            }
+
+            // Score the decryption
+            double score = scoreDecryption(decrypted.toString());
+
+            // If current score is better, update best score and best decryption
+            if (score > bestScore) {
+                bestScore = score;
+                bestDecryption = decrypted.toString();
+            }
+        }
+        return bestDecryption;
+    }
+
+    // Scores a decryption based on the frequency of English letters and common English words
+    private static double scoreDecryption(String decryption) {
+        // Here, you can implement any scoring mechanism based on the frequency of English letters and common English words.
+        // For simplicity, let's assume a scoring mechanism that counts the frequency of English letters and common English words.
+        // You can improve this scoring mechanism based on your requirements.
+
+        // Example scoring mechanism (you can customize this):
+        int letterCount = 0;
+        int spaceCount = 0;
+        for (char c : decryption.toCharArray()) {
+            if (Character.isLetter(c)) {
+                letterCount++;
+            } else if (Character.isWhitespace(c)) {
+                spaceCount++;
+            }
+        }
+
+        // Score is based on the number of letters and spaces
+        return letterCount + spaceCount;
+    }
+}

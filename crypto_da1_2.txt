@@ -1,0 +1,76 @@
+/*
+Fixed XOR method
+
+The fixedXOR method takes two hexadecimal strings (hexString1 and hexString2) as input parameters.
+These strings are converted into byte arrays using the hexStringToByteArray method.
+The XOR operation is performed byte by byte between the corresponding bytes of the two byte arrays (bytes1 and bytes2).
+The result of the XOR operation is stored in the xorResult byte array.
+Finally, the byte array representing the XOR result is converted back to a hexadecimal string using a StringBuilder and then returned.
+
+Hex to Byte array conversion
+The hexStringToByteArray method converts a hexadecimal string into a byte array.
+It iterates over the characters of the hexadecimal string in pairs (since each byte is represented by two hexadecimal characters).
+For each pair of characters, it converts them into their corresponding byte value and stores them in the byte array.
+
+*/
+import java.util.*;
+public class Crypto_problem_FixedXOR {
+    
+    static void myDetails(){
+        System.out.println("*************************************************************************");
+        System.out.println("         NAME    : MONISHA S");
+        System.out.println("         REG.NO  : 21BCT0414");
+        System.out.println("         AIM     : Implementation of program for Fixed XOR");
+        System.out.println("         DATE    : 02/08/2024");
+        System.out.println("*************************************************************************\n");
+    } 
+    
+    public static void main(String[] args) {
+        
+        //printing the details of me and the question
+        myDetails();
+        //String hexString1 = "1c0111001f010100061a024b53535009181c";
+        //String hexString2 = "686974207468652062756c6c277320657965";
+        Scanner input=new Scanner(System.in);
+        
+        //Read the input
+        System.out.print("Enter the hexString1 : ");
+        String hexString1=input.nextLine();
+        System.out.print("Enter the hexString2 : ");
+        String hexString2=input.nextLine();
+        
+        // Perform fixed XOR
+        String result = fixedXOR(hexString1, hexString2);
+
+        System.out.println("\nResult: " + result);
+    }
+
+    public static String fixedXOR(String hexString1, String hexString2) {
+        // Convert hex strings to byte arrays
+        byte[] bytes1 = hexStringToByteArray(hexString1);
+        byte[] bytes2 = hexStringToByteArray(hexString2);
+
+        // Perform XOR operation
+        byte[] xorResult = new byte[bytes1.length];
+        for (int i = 0; i < bytes1.length; i++) {
+            xorResult[i] = (byte) (bytes1[i] ^ bytes2[i]);
+        }
+
+        // Convert byte array to hex string
+        StringBuilder sb = new StringBuilder();
+        for (byte b : xorResult) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
+
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i + 1), 16));
+        }
+        return data;
+    }
+}

@@ -1,0 +1,87 @@
+/*
+Single Byte XOR Decryption Method:
+The decryptSingleByteXOR method takes a byte array as input, representing the hex-encoded string.
+It initializes variables to store the decrypted message, the best score, and the best key.
+The method then iterates through all possible keys (0 to 255).
+For each key, it decrypts the message using XOR with that key.
+It calculates a score based on the frequency of letters, digits, and whitespace characters in the decrypted text.
+If the current score is higher than the best score seen so far, it updates the best score, best key, and the decrypted message.
+Finally, it prints the key used for decryption and returns the decrypted message.
+
+Hex String to Byte Array Conversion Method:
+
+The hexStringToByteArray method converts a hex-encoded string into a byte array.
+It iterates over the characters of the hex string in pairs (since each byte is represented by two hexadecimal characters).
+For each pair of characters, it converts them into their corresponding byte value and stores them in the byte array.
+*/
+
+public class Crpyto_problem_SingleByteXORDecryption {
+    public static void main(String[] args) {
+        
+        //printing the details of me and the question
+        myDetails();
+        
+        // Hex-encoded string
+        System.out.println("Given Hex-encoded String : 1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736\n\nOutput\n");
+        String hexString = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
+
+        // Convert hex string to byte array
+        byte[] bytes = hexStringToByteArray(hexString);
+
+        // Decrypt the message
+        String decryptedMessage = decryptSingleByteXOR(bytes);
+
+        System.out.println("Decrypted message: " + decryptedMessage);
+    }
+    public static void myDetails(){
+        System.out.println("*************************************************************************");
+        System.out.println("         NAME    : MONISHA S");
+        System.out.println("         REG.NO  : 21BCT0414");
+        System.out.println("         AIM     : Key Finding and Decryption");
+        System.out.println("         DATE    : 02/08/2024");
+        System.out.println("*************************************************************************\n");
+    } 
+    public static String decryptSingleByteXOR(byte[] bytes) {
+        String decryptedMessage = "";
+        double bestScore = Double.NEGATIVE_INFINITY;
+        char bestKey = 0;
+
+        // Try all possible keys
+        for (int key = 0; key < 256; key++) {
+            StringBuilder decrypted = new StringBuilder();
+            double score = 0;
+
+            // Decrypt with current key
+            for (byte b : bytes) {
+                // XOR each byte with the key
+                char decryptedChar = (char) (b ^ key);
+                decrypted.append(decryptedChar);
+
+                // Score the decrypted text
+                if (Character.isLetterOrDigit(decryptedChar) || Character.isWhitespace(decryptedChar)) {
+                    score++;
+                }
+            }
+
+            // If current score is better, update best score and best key
+            if (score > bestScore) {
+                bestScore = score;
+                bestKey = (char) key;
+                decryptedMessage = decrypted.toString();
+            }
+        }
+        
+        System.out.println("Key used: " + (int) bestKey);
+        return decryptedMessage;
+    }
+
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i + 1), 16));
+        }
+        return data;
+    }
+}

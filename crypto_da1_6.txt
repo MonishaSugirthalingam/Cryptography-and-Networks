@@ -1,0 +1,59 @@
+import java.math.BigInteger;
+
+public class Crypto_problem_DiscreteLogarithm {
+    
+     public static void myDetails(){
+        System.out.println("*************************************************************************");
+        System.out.println("         NAME    : MONISHA S");
+        System.out.println("         REG.NO  : 21BCT0414");
+        System.out.println("         AIM     : Implementation of Discrete Logarthm problem");
+        System.out.println("         DATE    : 02/08/2024");
+        System.out.println("*************************************************************************\n");
+    } 
+    public static void main(String[] args) {
+        myDetails();
+        System.out.println("Input A\nlog10(22) for the prime p = 47\n");
+        // Case (a): log10(22) for the prime p = 47
+        int resultA = discreteLog(22, 10, 47);
+        System.out.println("Output A\nDiscrete logarithm of 22 base 10 modulo 47: " + resultA+"\n");
+
+        // Case (b): log627(608) for the prime p = 941
+        System.out.println("Input B\nlog627(608) for the prime p = 941\n");
+        int resultB = discreteLog(608, 627, 941);
+        System.out.println("Output B\nDiscrete logarithm of 608 base 627 modulo 941: " + resultB+"\n");
+    }
+
+    // Function to compute the discrete logarithm using Baby-step Giant-step algorithm
+    public static int discreteLog(int a, int b, int p) {
+        BigInteger bigA = BigInteger.valueOf(a);
+        BigInteger bigB = BigInteger.valueOf(b);
+        BigInteger bigP = BigInteger.valueOf(p);
+
+        // Computing m (the ceiling square root of p)
+        int m = (int) Math.ceil(Math.sqrt(p));
+
+        // Precomputing a^m modulo p for efficiency
+        BigInteger[] precomputed = new BigInteger[m];
+        BigInteger temp = BigInteger.ONE;
+        for (int i = 0; i < m; i++) {
+            precomputed[i] = temp;
+            temp = temp.multiply(bigA).mod(bigP);
+        }
+
+        // Computing the giant steps
+        BigInteger giantStep = bigB;
+        BigInteger inverseA = bigA.modInverse(bigP);
+        for (int j = 0; j < m; j++) {
+            // Check if the giant step is in the precomputed list
+            for (int i = 0; i < m; i++) {
+                if (precomputed[i].equals(giantStep)) {
+                    return i * m + j; // Return the index
+                }
+            }
+            // If not found, continue with next giant step
+            giantStep = giantStep.multiply(inverseA).mod(bigP);
+        }
+
+        return -1; // If not found
+    }
+}

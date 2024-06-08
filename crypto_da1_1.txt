@@ -1,0 +1,75 @@
+/* 
+Import Statements:
+
+import java.util.Base64;: This imports the Base64 class from the java.util package, which provides methods for encoding and decoding data in Base64 format.
+Class Declaration:
+
+public class Main {: This declares a public class named HexToBase64.
+Main Method:
+
+public static void main(String[] args) { ... }: This is the entry point of the program. It contains the main logic.
+Hex String Initialization:
+
+String hexString = "49276d20 ... 6f6d";: This initializes a string hexString with the given hexadecimal string.
+Conversion from Hex to Bytes:
+
+byte[] bytes = hexStringToByteArray(hexString);: This calls the hexStringToByteArray method to convert the hexadecimal string to a byte array.
+Encoding to Base64:
+
+String base64String = Base64.getEncoder().encodeToString(bytes);: This encodes the byte array obtained from the hexadecimal string into a Base64 string using the Base64 encoder obtained from Base64.getEncoder().
+Printing Base64 String:
+
+System.out.println("Base64: " + base64String);: This prints the Base64 encoded string to the console.
+Hex String to Byte Array Conversion Method:
+
+public static byte[] hexStringToByteArray(String s) { ... }: This method converts a hexadecimal string to a byte array.
+int len = s.length();: This gets the length of the input string.
+byte[] data = new byte[len / 2];: This initializes a byte array with half the length of the input string, as two characters in the hexadecimal string represent one byte.
+The for loop iterates through the input string, converting pairs of characters to bytes.
+Character.digit(s.charAt(i), 16) converts a hexadecimal character to its integer value.
+(byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i+1), 16)): This combines two hexadecimal characters into one byte, shifting the first character's value by 4 bits to the left and adding the second character's value.
+
+*/
+import java.util.Base64;
+
+
+
+public class Crypto_problem_hextobase64{
+    
+    static void myDetails(){
+        System.out.println("*************************************************************************");
+        System.out.println("         NAME    : MONISHA S");
+        System.out.println("         REG.NO  : 21BCT0414");
+        System.out.println("         AIM     : Implementation of program for Converting hex to base64");
+        System.out.println("         DATE    : 02/08/2024");
+        System.out.println("*************************************************************************\n");
+    }
+    public static void main(String[] args) {
+        //printing the details of me and the question
+        myDetails();
+        
+        // Hex string
+        String hexString = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
+        System.out.println("Given Hex String\n");
+        System.out.println(hexString);
+        // Convert hex to bytes
+        byte[] bytes = hexStringToByteArray(hexString);
+        
+        // Encode bytes to Base64
+        String base64String = Base64.getEncoder().encodeToString(bytes);
+        
+        // Print Base64 string
+        System.out.println("\nAfter Converting Hex to Base64\n"); 
+        System.out.println(base64String);
+    }
+
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                                 + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
+    }
+}
